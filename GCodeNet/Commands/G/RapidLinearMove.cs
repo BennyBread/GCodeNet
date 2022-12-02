@@ -1,8 +1,10 @@
+using GCodeNet.Interfaces;
+
 namespace GCodeNet.Commands
 {
     [Command(CommandType.G, 1)]
-    public class RapidLinearMove : CommandMapping
-    {
+    public class RapidLinearMove : CommandMapping, ILinearMove
+	{
         [ParameterType("X")]
         public decimal? MoveX { get; set; }
         [ParameterType("Y")]

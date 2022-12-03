@@ -3,7 +3,7 @@ using GCodeNet.Interfaces;
 namespace GCodeNet.Commands
 {
     [Command(CommandType.G, 0)]
-    public class LinearMove: CommandMapping, ILinearMove
+    public class LinearMove: CommandMapping, ILinearMove, IExtruderMove
 	{
         [ParameterType("X")]
         public decimal? MoveX { get; set; }
@@ -16,7 +16,7 @@ namespace GCodeNet.Commands
         [ParameterType("F")]
         public decimal? Feedrate { get; set; }
         [ParameterType("S")]
-        public CheckEndstop CheckEndstop { get; set; }
+        public CheckEndstop? CheckEndstop { get; set; }
     }
 
     public enum CheckEndstop

@@ -9,28 +9,28 @@ namespace GCodeNet.Commands.M
 		//https://marlinfw.org/docs/gcode/M205.html
 
 		[ParameterType("B")]
-		public int? MinimumSegmentTime { get; set; }
+		public decimal? MinimumSegmentTime { get; set; }
 
 		[ParameterType("E")]
-		public int? EMaxJerk { get; set; }
+		public decimal? EMaxJerk { get; set; }
 
 		[ParameterType("J")]
-		public int? JunctionDeviation{ get; set; }
+		public decimal? JunctionDeviation{ get; set; }
 
 		[ParameterType("S")]
-		public int? MinimumFeedrateForPrintMoves { get; set; }
+		public decimal? MinimumFeedrateForPrintMoves { get; set; }
 
 		[ParameterType("T")]
-		public int? MinimumFeedrateForTravelMoves { get; set; }
+		public decimal? MinimumFeedrateForTravelMoves { get; set; }
 
 		[ParameterType("X")]
-		public int? XMaxJerk { get; set; }
+		public decimal? XMaxJerk { get; set; }
 
 		[ParameterType("Y")]
-		public int? YMaxJerk { get; set; }
+		public decimal? YMaxJerk { get; set; }
 
 		[ParameterType("Z")]
-		public int? ZMaxJerk { get; set; }
+		public decimal? ZMaxJerk { get; set; }
 
 	}
 }

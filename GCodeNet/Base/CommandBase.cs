@@ -211,7 +211,12 @@ namespace GCodeNet
             throw new NotImplementedException();
         }
 
-        public IEnumerator<KeyValuePair<ParameterType, object>> GetEnumerator()
+		public override string ToString()
+		{
+			return ToGCode();
+		}
+
+		public IEnumerator<KeyValuePair<ParameterType, object>> GetEnumerator()
         {
             foreach (var key in GetParameters())
             {

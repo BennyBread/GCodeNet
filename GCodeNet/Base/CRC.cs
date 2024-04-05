@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace GCodeNet
 {
@@ -10,8 +7,8 @@ namespace GCodeNet
         public static byte Calculate(string line)
         {
             var bytes = Encoding.UTF8.GetBytes(line);
-            int cs = 0;
-            for (int i = 0; i < bytes.Length; i++)
+            var cs = 0;
+            for (var i = 0; i < bytes.Length; i++)
             {
                 cs = cs ^ bytes[i];
             }

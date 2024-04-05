@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace GCodeNet
 {
     internal class GCodeFileLine
@@ -20,7 +18,7 @@ namespace GCodeNet
             GCode = line;
         }
 
-        string GetComment(string str)
+        private string GetComment(string str)
         {
             var idx = str.IndexOf(';');
             if (idx >= 0)
@@ -32,7 +30,7 @@ namespace GCodeNet
             return str;
         }
 
-        void ValidateChecksum(string line)
+        private void ValidateChecksum(string line)
         {
             if (Checksum == null)
             {
@@ -43,7 +41,7 @@ namespace GCodeNet
             IsChecksumValid = Checksum == CRC.Calculate(line);
         }
 
-        string GetChecksum(string str)
+        private string GetChecksum(string str)
         {
             var idx = str.LastIndexOf('*');
             if (idx >= 0)

@@ -10,7 +10,7 @@ namespace GCodeNet.Commands.M
 
         public override string ToGCode(bool addCrc = false, int lineNumber = -1)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (lineNumber > -1)
             {

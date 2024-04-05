@@ -4,9 +4,9 @@ using System.Text;
 
 namespace GCodeNet
 {
-    class GCodeTokenizer
+    internal class GCodeTokenizer
     {
-        string gcode;
+        private string gcode;
 
         public GCodeTokenizer(string gcode)
         {
@@ -17,18 +17,18 @@ namespace GCodeNet
             this.gcode = gcode;
         }
 
-        void CheckForIllegalChars(string gcode)
+        private void CheckForIllegalChars(string gcode)
         {
-            HashSet<char> list = new HashSet<char>();
-            for (char c='a'; c<='z';c++)
+            var list = new HashSet<char>();
+            for (var c='a'; c<='z';c++)
             {
                 list.Add(c);
             }
-            for (char c = 'A'; c <= 'Z'; c++)
+            for (var c = 'A'; c <= 'Z'; c++)
             {
                 list.Add(c);
             }
-            for (char c = '0'; c <= '9'; c++)
+            for (var c = '0'; c <= '9'; c++)
             {
                 list.Add(c);
             }
@@ -46,10 +46,10 @@ namespace GCodeNet
             }
         }
 
-        string RemoveWhitespace(string str)
+        private string RemoveWhitespace(string str)
         {
             //this.gcode = Regex.Replace(gcode, @"\s+", ""); This is a bit slower
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var c in str)
             {
                 if (!char.IsWhiteSpace(c))
@@ -62,9 +62,9 @@ namespace GCodeNet
 
         public IEnumerable<string[]> GetCommandTokens()
         {
-            bool isFirstToken = true;
+            var isFirstToken = true;
 
-            List<string> tokens = new List<string>();
+            var tokens = new List<string>();
             foreach (var token in GetTokens())
             {
                 if (isFirstToken)
@@ -109,19 +109,19 @@ namespace GCodeNet
             }
         }
 
-        bool IsValidCommandType(string token)
+        private bool IsValidCommandType(string token)
         {
             return Enum.IsDefined(typeof(CommandType), token);
         }
 
-        bool IsValidParameter(string token)
+        private bool IsValidParameter(string token)
         {
             if (token[0] == '"' && token[token.Length - 1] == '"')
                 return true;
             return Enum.IsDefined(typeof(ParameterType), token);
         }
 
-        bool IsParameterValue(string token)
+        private bool IsParameterValue(string token)
         {
             decimal tmp;
             return decimal.TryParse(token, out tmp);
@@ -129,11 +129,11 @@ namespace GCodeNet
 
         public IEnumerable<string> GetTokens()
         {
-            StringBuilder buff = new StringBuilder();
+            var buff = new StringBuilder();
 
-            string lastToken = "";
+            var lastToken = "";
 
-            int i = 0;
+            var i = 0;
             while(i < gcode.Length)
             {
                 var token = GetNextToken(ref i);
@@ -153,14 +153,14 @@ namespace GCodeNet
             }
         }
 
-        string ReadUntilEndOfLine(ref int i)
+        private string ReadUntilEndOfLine(ref int i)
         {
             ConsumeWhiteSpace(ref i);
 
-            StringBuilder token = new StringBuilder();
+            var token = new StringBuilder();
             while (i < gcode.Length)
             {
-                char c = gcode[i];
+                var c = gcode[i];
                 if (c == '\n')
                 {
                     return token.ToString().TrimEnd('\n', '\r');
@@ -174,11 +174,11 @@ namespace GCodeNet
             return token.ToString().TrimEnd('\n','\r');
         }
 
-        void ConsumeWhiteSpace(ref int i)
+        private void ConsumeWhiteSpace(ref int i)
         {
             while (i < gcode.Length)
             {
-                char c = gcode[i];
+                var c = gcode[i];
                 if (!char.IsWhiteSpace(c))
                 {
                     break;
@@ -187,7 +187,7 @@ namespace GCodeNet
             }
         }
 
-        string GetNextToken(ref int i)
+        private string GetNextToken(ref int i)
         {
             ConsumeWhiteSpace(ref i);
             if (i >= gcode.Length) return null;
@@ -197,10 +197,10 @@ namespace GCodeNet
                 return gcode[i++].ToString().ToUpper();
             }
 
-            StringBuilder token = new StringBuilder();
+            var token = new StringBuilder();
             while (i < gcode.Length)
             {
-                char c = gcode[i];
+                var c = gcode[i];
                 if ((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.' || c == ':')
                 {
                     token.Append(c);

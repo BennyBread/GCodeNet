@@ -7,9 +7,9 @@ namespace GCodeNet
 {
     public static class CommandReflection
     {
-        static Dictionary<Tuple<CommandType, int>, Type> typesLookup = new Dictionary<Tuple<CommandType, int>, Type>();
+        private static Dictionary<Tuple<CommandType, int>, Type> typesLookup = new Dictionary<Tuple<CommandType, int>, Type>();
 
-        static Dictionary<Type, CommandReflectionData> propsLookup = new Dictionary<Type, CommandReflectionData>();
+        private static Dictionary<Type, CommandReflectionData> propsLookup = new Dictionary<Type, CommandReflectionData>();
 
         static CommandReflection()
         {
@@ -24,7 +24,7 @@ namespace GCodeNet
         }
         public static void AddMappedTypesFromAssembly(Assembly assembly)
         {
-            foreach (Type type in assembly.GetTypes())
+            foreach (var type in assembly.GetTypes())
             {
                 if (type.IsSubclassOf(typeof(CommandMapping)))
                 {

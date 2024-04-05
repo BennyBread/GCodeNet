@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace GCodeNet.Commands.M
+﻿namespace GCodeNet.Commands.M
 {
 	[Command(CommandType.M, 140)]
 	public class SetBedTemperature : CommandMapping

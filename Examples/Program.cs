@@ -4,9 +4,9 @@ using GCodeNet.Commands;
 
 namespace Examples
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             CreateGCodeCommand();
             CreateCommandFromGCode();
@@ -16,7 +16,7 @@ namespace Examples
             Console.ReadLine();
         }
 
-        static void CreateGCodeCommand()
+        private static void CreateGCodeCommand()
         {
             //Create a G1 command (Rapid Linear Movement)
             var cmd = new Command(CommandType.G, 1);
@@ -33,7 +33,7 @@ namespace Examples
             Console.WriteLine(cmd.ToGCode(addCrc: true, lineNumber: 4)); //Output: "N4 G1 X10 Y20*46"
         }
 
-        static void CreateCommandFromGCode()
+        private static void CreateCommandFromGCode()
         {
             var cmd = Command.Parse("G1 X10 Y20");
 
@@ -43,7 +43,7 @@ namespace Examples
             Console.WriteLine(cmd.GetParameterValue(ParameterType.Y)); //Output: "20"
         }
 
-        static void GCodeFromMappedCommand()
+        private static void GCodeFromMappedCommand()
         {
             var cmd = new RapidLinearMove();
             cmd.MoveX = 10;
@@ -57,7 +57,7 @@ namespace Examples
             Console.WriteLine(cmd.ToGCode()); //Output: "G1 X10 Y20 S0"
         }
 
-        static void MappedCommandFromGCode()
+        private static void MappedCommandFromGCode()
         {
             var cmd = CommandMapping.Parse("G1 X10 Y20") as RapidLinearMove;
 

@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
-
-namespace GCodeNet.Commands.M
+﻿namespace GCodeNet.Commands.M
 {
 	[Command(CommandType.M, 205)]
 	public class SetAdvancedSettings : CommandMapping

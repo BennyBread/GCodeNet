@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GCodeNet.Interfaces
+﻿namespace GCodeNet.Interfaces
 {
 	public interface IExtruderMove
 	{

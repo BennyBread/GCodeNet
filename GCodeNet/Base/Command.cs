@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace GCodeNet
 {
     public class Command : CommandBase
     {
-        Dictionary<ParameterType, object> parameters = new Dictionary<ParameterType, object>();
+        private Dictionary<ParameterType, object> parameters = new Dictionary<ParameterType, object>();
 
         private Command() { }
 

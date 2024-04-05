@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Text;
 
 namespace GCodeNet
 {
@@ -16,8 +15,8 @@ namespace GCodeNet
 
         public GCodeFile(string gcode, GCodeFileOptions options)
         {
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
             writer.Write(gcode);
             writer.Flush();
             stream.Position = 0;
@@ -34,7 +33,7 @@ namespace GCodeNet
             Init(stream, options);
         }
 
-        void Init(Stream stream, GCodeFileOptions options)
+        private void Init(Stream stream, GCodeFileOptions options)
         {
             var gcodeLines = GetAllGCodeLines(stream).ToArray();
 
@@ -55,9 +54,9 @@ namespace GCodeNet
             }
         }
 
-        IEnumerable<GCodeFileLine> GetAllGCodeLines(Stream stream)
+        private IEnumerable<GCodeFileLine> GetAllGCodeLines(Stream stream)
         {
-            StreamReader reader = new StreamReader(stream);
+            var reader = new StreamReader(stream);
             while (!reader.EndOfStream)
             {
                 var lineStr = reader.ReadLine();
@@ -66,9 +65,9 @@ namespace GCodeNet
             }
         }
 
-        void CheckCRC(GCodeFileLine[] gcodeLines)
+        private void CheckCRC(GCodeFileLine[] gcodeLines)
         {
-            for (int i = 0; i < gcodeLines.Length; i++)
+            for (var i = 0; i < gcodeLines.Length; i++)
             {
                 if (!gcodeLines[i].IsChecksumValid)
                 {
@@ -78,10 +77,10 @@ namespace GCodeNet
             }
         }
 
-        void CheckLineNumbers(IEnumerable<CommandBase> commands)
+        private void CheckLineNumbers(IEnumerable<CommandBase> commands)
         {
             var lineNumCommands = commands.Where(c => c.CommandType == CommandType.N).ToArray();
-            for (int i=0; i<lineNumCommands.Length-1; i++)
+            for (var i=0; i<lineNumCommands.Length-1; i++)
             {
                 var lineNum1 = lineNumCommands[i].CommandSubType;
                 var lineNum2 = lineNumCommands[i+1].CommandSubType;
@@ -93,7 +92,7 @@ namespace GCodeNet
             }
         }
 
-        CommandBase CreateCommandFromTokens(string[] cmdTokens, bool useMappedObjects)
+        private CommandBase CreateCommandFromTokens(string[] cmdTokens, bool useMappedObjects)
         {
             return Command.FromTokens(cmdTokens, useMappedObjects);
         }
@@ -126,7 +125,7 @@ namespace GCodeNet
 
             if (options.WriteLineNumbers)
             {
-                int lineCounter = 1;
+                var lineCounter = 1;
                 commands = RemoveAllLineNumbers(commands);
                 foreach (var command in commands)
                 {
@@ -143,7 +142,7 @@ namespace GCodeNet
             writer.Flush();
         }
 
-        CommandBase[] RemoveAllLineNumbers(CommandBase[] commands)
+        private CommandBase[] RemoveAllLineNumbers(CommandBase[] commands)
         {
             return commands.Where(c => c.CommandType != CommandType.N).ToArray();
         }

@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace TestProject
 {
-    class MissingAttributeClass : CommandMapping
+    internal class MissingAttributeClass : CommandMapping
     {
     }
 
     [Command(CommandType.M, 999)]
-    class CustomCommand : CommandMapping
+    internal class CustomCommand : CommandMapping
     {
         [ParameterType(ParameterType.X)]
         public int X { get; set; }
@@ -27,19 +27,19 @@ namespace TestProject
             cmd.MoveX = 1;
             cmd.MoveY = 1.2m;
 
-            Assert.IsTrue(cmd.CommandType == CommandType.G);
-            Assert.IsTrue(cmd.CommandSubType == 1);
+            Assert.That(cmd.CommandType == CommandType.G);
+            Assert.That(cmd.CommandSubType == 1);
 
             var parameters = cmd.GetParameters().ToArray();
-            Assert.IsTrue(parameters[0] == ParameterType.X);
-            Assert.IsTrue(parameters[1] == ParameterType.Y);
-            Assert.IsTrue(parameters[2] == ParameterType.S);
+            Assert.That(parameters[0] == ParameterType.X);
+            Assert.That(parameters[1] == ParameterType.Y);
+            Assert.That(parameters[2] == ParameterType.S);
 
-            Assert.IsTrue((decimal)cmd.GetParameterValue(ParameterType.X) == 1);
-            Assert.IsTrue((decimal)cmd.GetParameterValue(ParameterType.Y) == 1.2m);
-            Assert.IsTrue((decimal)cmd.GetParameterValue(ParameterType.S) == 0);
+            Assert.That((decimal)cmd.GetParameterValue(ParameterType.X) == 1);
+            Assert.That((decimal)cmd.GetParameterValue(ParameterType.Y) == 1.2m);
+            Assert.That((decimal)cmd.GetParameterValue(ParameterType.S) == 0);
 
-            Assert.IsTrue(cmd.ToGCode() == "G1 X1 Y1.2 S0");
+            Assert.That(cmd.ToGCode() == "G1 X1 Y1.2 S0");
         }
 
         [Test]
@@ -48,14 +48,14 @@ namespace TestProject
             var cmd = new SetExtruderTemperature();
             cmd.Temperature = 98;
 
-            Assert.IsTrue(cmd.CommandType == CommandType.M);
-            Assert.IsTrue(cmd.CommandSubType == 104);
+            Assert.That(cmd.CommandType == CommandType.M);
+            Assert.That(cmd.CommandSubType == 104);
 
             var parameters = cmd.GetParameters().ToArray();
-            Assert.IsTrue(parameters[0] == ParameterType.S);
-            Assert.IsTrue((decimal)cmd.GetParameterValue(ParameterType.S) == 98);
+            Assert.That(parameters[0] == ParameterType.S);
+            Assert.That((decimal)cmd.GetParameterValue(ParameterType.S) == 98);
 
-            Assert.IsTrue(cmd.ToGCode() == "M104 S98");
+            Assert.That(cmd.ToGCode() == "M104 S98");
         }
 
         [Test]
@@ -69,17 +69,17 @@ namespace TestProject
         {
             var cmd = new SetExtruderTemperature();
             cmd.Temperature = 98;
-            Assert.IsTrue((decimal)cmd.GetParameterValue(ParameterType.S) == 98);
+            Assert.That((decimal)cmd.GetParameterValue(ParameterType.S) == 98);
 
             cmd.SetParameterValue(ParameterType.S, 33);
-            Assert.IsTrue(cmd.Temperature == 33);
+            Assert.That(cmd.Temperature == 33);
 
             cmd.SetParameterValue(ParameterType.S, null);
-            Assert.IsTrue(cmd.Temperature == null);
+            Assert.That(cmd.Temperature == null);
 
             cmd.SetParameterValue(ParameterType.S, 1);
             cmd.Temperature = null;
-            Assert.IsTrue(cmd.GetParameterValue(ParameterType.S) == null);
+            Assert.That(cmd.GetParameterValue(ParameterType.S) == null);
 
         }
 

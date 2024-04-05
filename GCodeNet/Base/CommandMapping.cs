@@ -8,8 +8,7 @@ namespace GCodeNet
     {
         protected CommandMapping()
         {
-            var attrib = this.GetType().GetCustomAttributes(typeof(CommandAttribute), true).FirstOrDefault() as CommandAttribute;
-            if (attrib == null)
+            if (!(this.GetType().GetCustomAttributes(typeof(CommandAttribute), true).FirstOrDefault() is CommandAttribute attrib))
             {
                 throw new Exception("A mapped command must have the CommandAttribute attribute");
             }
@@ -25,7 +24,7 @@ namespace GCodeNet
                 var paramType = kv.Key;
                 var propInfo = kv.Value;
 
-                if (propInfo.PropertyType.Equals(typeof(bool)) && (bool)propInfo.GetValue(this, null) == true)
+                if (propInfo.PropertyType == typeof(bool) && (bool)propInfo.GetValue(this, null) == true)
                 {
                     yield return paramType;
                 }
@@ -48,15 +47,17 @@ namespace GCodeNet
             var propInfo = reflectionData.MappedProperties[parameter];
             var type = propInfo.PropertyType;
 
-            if (type.Equals(typeof(bool)))
+            if (type == typeof(bool))
             {
                 return null;
             }
-            else if (type.IsEnum)
+
+            if (type.IsEnum)
             {
                 return (decimal)(int)propInfo.GetValue(this, null);
             }
-            else if (type.IsGenericType && type.GetGenericArguments()[0].IsEnum)
+
+            if (type.IsGenericType && type.GetGenericArguments()[0].IsEnum)
             {
                 var val = propInfo.GetValue(this, null);
                 if (val == null) return null;
@@ -77,9 +78,9 @@ namespace GCodeNet
             var propInfo = reflectionData.MappedProperties[parameter];
 
             var type = propInfo.PropertyType;
-            bool isNullableType = type.Equals(typeof(string)) || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
+            var isNullableType = type == typeof(string) || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
 
-            if (type.Equals(typeof(bool)) || type.Equals(typeof(bool?)))
+            if (type == typeof(bool) || type == typeof(bool?))
             {
                 propInfo.SetValue(this, true, null);
             }
@@ -100,23 +101,23 @@ namespace GCodeNet
             }
             else if (value != null)
             {
-                if (type.Equals(typeof(string)))
+                if (type == typeof(string))
                 {
                     propInfo.SetValue(this, value, null);
                 }
-                else if (type.Equals(typeof(byte)) || type.Equals(typeof(byte?)))
+                else if (type == typeof(byte) || type == typeof(byte?))
                 {
                     propInfo.SetValue(this, Convert.ChangeType(value, typeof(byte)), null);
                 }
-                else if (type.Equals(typeof(int)) || type.Equals(typeof(int?)))
+                else if (type == typeof(int) || type == typeof(int?))
                 {
                     propInfo.SetValue(this, Convert.ChangeType(value, typeof(int)), null);
                 }
-                else if (propInfo.PropertyType.Equals(typeof(double)) || propInfo.PropertyType.Equals(typeof(double?)))
+                else if (propInfo.PropertyType == typeof(double) || propInfo.PropertyType == typeof(double?))
                 {
                     propInfo.SetValue(this, Convert.ChangeType(value, typeof(double)), null);
                 }
-                else if (propInfo.PropertyType.Equals(typeof(decimal)) || propInfo.PropertyType.Equals(typeof(decimal?)))
+                else if (propInfo.PropertyType == typeof(decimal) || propInfo.PropertyType == typeof(decimal?))
                 {
                     propInfo.SetValue(this, Convert.ChangeType(value, typeof(decimal)), null);
                 }
@@ -175,7 +176,8 @@ namespace GCodeNet
         public static CommandMapping FromTokens(string[] tokens)
         {
             var commandLetter = (CommandType)Enum.Parse(typeof(CommandType), tokens[0]);
-            int commandNumber = int.Parse(tokens[1]);
+            var commandNumber = int.Parse(tokens[1]);
+
             var type = CommandReflection.GetCommandObjectType(commandLetter, commandNumber);
             if (type == null)
             {

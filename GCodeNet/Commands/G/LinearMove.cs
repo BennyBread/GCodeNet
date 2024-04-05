@@ -18,12 +18,4 @@ namespace GCodeNet.Commands
         [ParameterType("S")]
         public CheckEndstop? CheckEndstop { get; set; }
     }
-
-    public enum CheckEndstop
-    {
-        Ignore = 0,
-        Check = 1,
-    }
-
-
 }

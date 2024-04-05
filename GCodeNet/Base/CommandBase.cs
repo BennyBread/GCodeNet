@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using System.Globalization;
 
 namespace GCodeNet
 {
@@ -23,7 +24,7 @@ namespace GCodeNet
             this.CommandType = (CommandType)Enum.Parse(typeof(CommandType), tokens[0]);
             this.CommandSubType = int.Parse(tokens[1]);
 
-            int i = 2;
+            var i = 2;
             while (i < tokens.Length)
             {
                 var paramType = (ParameterType)Enum.Parse(typeof(ParameterType), tokens[i++]);
@@ -36,7 +37,7 @@ namespace GCodeNet
                     }
                     else
                     {
-                        value = decimal.Parse(tokens[i++]);
+                        value = decimal.Parse(tokens[i++], NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture);
                     }
                 }
                 this.SetParameterValue(paramType, value);
@@ -59,7 +60,7 @@ namespace GCodeNet
             if (useMappedCommands)
             {
                 var commandLetter = (CommandType)Enum.Parse(typeof(CommandType), tokens[0]);
-                int commandNumber = int.Parse(tokens[1]);
+                var commandNumber = int.Parse(tokens[1]);
                 var type = CommandReflection.GetCommandObjectType(commandLetter, commandNumber);
                 if (type != null)
                 {
@@ -71,7 +72,7 @@ namespace GCodeNet
 
         public virtual string ToGCode(bool addCrc = false, int lineNumber = -1)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (lineNumber > -1)
             {
@@ -89,7 +90,7 @@ namespace GCodeNet
                 var val = this.GetParameterValue(param);
                 if (val != null)
                 {
-                    sb.Append(val);
+                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0}", val);
                 }
             }
             if (addCrc)
